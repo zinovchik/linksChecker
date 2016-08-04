@@ -22,17 +22,25 @@ function addMenuLinksChecker() {
 }
 
 function functionAddLinksChecker() {
-    printf("\n<script type='text/javascript'>var linksCheckerPath = '%s';</script>\n", plugins_url());
+    printf("\n<script type='text/javascript'>var linksCheckerPath = '%s'; var linksSelector = '%s'; var imgSelector = '%s';</script>\n",
+        plugins_url(),
+        get_option('linksCheckerSelectorLinks') ? get_option('linksCheckerSelectorLinks') : 'a',
+        get_option('linksCheckerSelectorImg') ? get_option('linksCheckerSelectorImg') : 'img'
+    );
     wp_enqueue_script('LinksChecker', plugins_url('linksChecker.js', __FILE__));
 }
 
 function linksChecker() {
     //By default
     add_option('linksCheckerOn', true, '', 'no');
+    add_option('linksCheckerSelectorLinks', 'a', '', 'no');
+    add_option('linksCheckerSelectorImg', 'img', '', 'no');
 
     //Save settings
     if (isset($_POST['linksCheckerSaveSettings'])) {
         update_option('linksCheckerOn', $_POST['linksCheckerOn']);
+        update_option('linksCheckerSelectorLinks', $_POST['linksCheckerSelectorLinks']);
+        update_option('linksCheckerSelectorImg', $_POST['linksCheckerSelectorImg']);
     }
 
     printf("<h2>Links Checker Settings:</h2>
@@ -47,6 +55,27 @@ function linksChecker() {
                             </label>
                         </td>
                     </tr>
+
+                    <tr>
+                        <td>
+                            <label>
+                            Link Selector:
+                            </label>
+                        </td>
+                        <td>
+                            <input name='linksCheckerSelectorLinks' id='linksCheckerSelectorLinks' value='" . get_option('linksCheckerSelectorLinks') . "' type='text' />
+                        </td>
+				    </tr>
+				    <tr>
+                        <td>
+                            <label>
+                            Images Selector:
+                            </label>
+                        </td>
+                        <td>
+                            <input name='linksCheckerSelectorImg' id='linksCheckerSelectorImg' value='" . get_option('linksCheckerSelectorImg') . "' type='text' />
+                        </td>
+				    </tr>
                     <tr>
                         <td colspan='2'>
                             &nbsp;
